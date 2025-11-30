@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixxx-invisible - Bug WhatsApp Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #25D366;
+            --dark: #0a0a0a;
+            --dark-gray: #1a1a1a;
+            --medium-gray: #2a2a2a;
+            --light-gray: #3a3a3a;
+            --text: #e0e0e0;
+            --accent: #ff003c;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark), var(--dark-gray));
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--dark), var(--dark-gray));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            letter-spacing: 2px;
+            color: var(--primary);
+        }
+
+        .loading-subtext {
+            font-size: 14px;
+            margin-top: 10px;
+            color: var(--text);
+            opacity: 0.7;
+        }
+
+        /* Header */
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), #128C7E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 10px;
+            text-shadow: 0 0 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            margin-right: 10px;
+            font-size: 24px;
+            filter: drop-shadow(0 0 5px rgba(37, 211, 102, 0.5));
+        }
+
+        .info-menu {
+            display: flex;
+            gap: 25px;
+            font-size: 14px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: var(--medium-gray);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .info-item i {
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            background: var(--dark-gray);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .hero-text {
+            flex: 1;
+            min-width: 300px;
+            padding-right: 20px;
+        }
+
+        .hero-title {
+            font-size: 42px;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--primary), #128C7E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        .target-input {
+            margin: 25px 0;
+        }
+
+        .target-input label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .input-group {
+            display: flex;
+            max-width: 400px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 12px 15px;
+            background: var(--medium-gray);
+            border: 1px solid var(--light-gray);
+            border-radius: 5px 0 0 5px;
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 5px rgba(37, 211, 102, 0.5);
+        }
+
+        .input-group button {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .input-group button:hover {
+            background: #128C7E;
+        }
+
+        .hero-image {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .logo-large {
+            font-size: 150px;
+            color: var(--primary);
+            filter: drop-shadow(0 0 15px rgba(37, 211, 102, 0.5));
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+
+        /* Features Section */
+        .features {
+            margin: 50px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: var(--dark-gray);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--medium-gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .feature-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .feature-description {
+            color: #ccc;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, var(--primary), #128C7E);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.5);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, var(--accent), #c10030);
+            box-shadow: 0 4px 10px rgba(255, 0, 60, 0.3);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 6px 15px rgba(255, 0, 60, 0.5);
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, #f7971e, #ffd200);
+            box-shadow: 0 4px 10px rgba(247, 151, 30, 0.3);
+        }
+
+        .btn-warning:hover {
+            box-shadow: 0 6px 15px rgba(247, 151, 30, 0.5);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Server Status */
+        .server-status {
+            background: var(--dark-gray);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        /* Contact Section */
+        .contact {
+            margin: 50px 0;
+            text-align: center;
+        }
+
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        .copyright {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--dark-gray);
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--medium-gray);
+        }
+
+        .modal h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .modal p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+            }
+            
+            .hero-text {
+                padding-right: 0;
+                margin-bottom: 30px;
+            }
+            
+            .info-menu {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .contact-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .logo-large {
+                font-size: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">MEMUAT FIXXX-INVISIBLE</div>
+        <div class="loading-subtext">Tools Bug WhatsApp Premium</div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <i class="fas fa-skull logo-icon"></i>
+            <div class="logo">Fixxx-invisible</div>
+        </div>
+        <div class="info-menu">
+            <div class="info-item">
+                <i class="far fa-calendar-alt"></i>
+                <span id="current-date">Loading...</span>
+            </div>
+            <div class="info-item">
+                <i class="far fa-clock"></i>
+                <span id="current-time">Loading...</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-users"></i>
+                <span id="user-count">Loading...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <section class="hero">
+            <div class="hero-text">
+                <h1 class="hero-title">Fixxx-invisible</h1>
+                <p class="hero-subtitle">Tools Bug WhatsApp Premium dengan Fitur Terbaru dan Efek Maksimal</p>
+                <p>Website ini menyediakan berbagai fitur bug WhatsApp terbaru yang dapat digunakan untuk berbagai keperluan. Gunakan dengan bijak dan bertanggung jawab.</p>
+                
+                <div class="target-input">
+                    <label for="target-number"><i class="fas fa-mobile-alt"></i> Masukkan Nomor WhatsApp Target</label>
+                    <div class="input-group">
+                        <input type="text" id="target-number" placeholder="Contoh: 6283172916537" maxlength="15">
+                        <button onclick="setTarget()"><i class="fab fa-whatsapp"></i> Set Target</button>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <button class="btn" onclick="openWhatsApp()"><i class="fab fa-whatsapp"></i> Masuk ke WhatsApp Target</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <i class="fas fa-skull-crossbones logo-large"></i>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <h2 class="section-title">Fitur Utama Fixxx-invisible</h2>
+            <div class="feature-grid">
+                <!-- Fitur 1: Bug Android -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-android"></i>
+                    </div>
+                    <h3 class="feature-title">Bug Android</h3>
+                    <p class="feature-description">Fitur untuk membuat HP target ngelag atau patah-patah dengan mengirimkan bug khusus ke perangkat Android. Efek akan langsung terasa dalam hitungan detik.</p>
+                    <button class="btn btn-danger" onclick="activateBug('android')"><i class="fas fa-bug"></i> Aktifkan Bug</button>
+                </div>
+
+                <!-- Fitur 2: Bug Class -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <h3 class="feature-title">Bug Class</h3>
+                    <p class="feature-description">Mengirimkan pesan ke WhatsApp target secara otomatis dengan konten yang dapat disesuaikan. Dapat mengirim hingga 1000 pesan dalam sekali eksekusi.</p>
+                    <button class="btn" onclick="activateBug('class')"><i class="fas fa-bug"></i> Aktifkan Bug</button>
+                </div>
+
+                <!-- Fitur 3: Bug Invisible -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <h3 class="feature-title">Bug Invisible</h3>
+                    <p class="feature-description">Membuat target tidak bisa login ke WhatsApp atau mengalami gangguan mental saat membuka aplikasi. Efek dapat bertahan hingga 24 jam.</p>
+                    <button class="btn btn-warning" onclick="activateBug('invisible')"><i class="fas fa-bug"></i> Aktifkan Bug</button>
+                </div>
+
+                <!-- Fitur 4: Bug iOS -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-apple"></i>
+                    </div>
+                    <h3 class="feature-title">Bug iOS</h3>
+                    <p class="feature-description">Membuat sinyal iPhone target ngelag atau tidak stabil dengan mengirimkan bug khusus untuk perangkat iOS. Juga dapat menyebabkan aplikasi crash berulang.</p>
+                    <button class="btn btn-primary" onclick="activateBug('ios')"><i class="fas fa-bug"></i> Aktifkan Bug</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Server Status -->
+        <section class="server-status">
+            <h2><span class="status-indicator"></span> Status Server: Online & Stabil</h2>
+            <p>Server kami saat ini berjalan dengan stabil dan siap melayani permintaan bug WhatsApp. Response time: &lt; 0.5 detik</p>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact">
+            <h2 class="section-title">Butuh Bantuan?</h2>
+            <p>Jika Anda mengalami kendala atau memiliki pertanyaan, hubungi Customer Service kami:</p>
+            <div class="contact-buttons">
+                <a href="mailto:faizajaj2@gmail.com" class="btn btn-primary">
+                    <i class="far fa-envelope"></i> Email CS
+                </a>
+                <a href="https://wa.me/6283172916537" class="btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i> WhatsApp CS
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="copyright">© 2023 Fixxx-invisible - All Rights Reserved | Tools Bug WhatsApp Premium</p>
+    </footer>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Peringatan</h2>
+            <p id="modal-message">Fitur ini akan mengaktifkan bug pada perangkat target. Pastikan Anda memiliki izin yang diperlukan.</p>
+            <div class="modal-buttons">
+                <button class="btn btn-danger" id="modal-confirm">Lanjutkan</button>
+                <button class="btn" onclick="closeModal()">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loading-screen').style.display = 'none';
+                }, 500);
+            }, 3000);
+        });
+
+        // Update Date and Time
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Format date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('id-ID', options);
+            
+            // Format time
+            document.getElementById('current-time').textContent = now.toLocaleTimeString('id-ID');
+        }
+
+        // Update User Count (simulasi)
+        function updateUserCount() {
+            const baseUsers = 1250;
+            const randomUsers = Math.floor(Math.random() * 50);
+            document.getElementById('user-count').textContent = (baseUsers + randomUsers) + ' Pengguna Online';
+        }
+
+        // Initialize and update every second
+        updateDateTime();
+        updateUserCount();
+        setInterval(updateDateTime, 1000);
+        setInterval(updateUserCount, 10000);
+
+        // Set Target WhatsApp
+        let targetNumber = '';
+        
+        function setTarget() {
+            const input = document.getElementById('target-number');
+            const number = input.value.trim();
+            
+            if (number.length < 10) {
+                alert('Nomor WhatsApp tidak valid! Pastikan nomor terdiri dari 10-15 digit.');
+                return;
+            }
+            
+            targetNumber = number;
+            alert('Target berhasil diset: ' + number);
+        }
+
+        // Bug Activation Functions
+        function activateBug(bugType) {
+            if (!targetNumber) {
+                alert('Harap set nomor WhatsApp target terlebih dahulu!');
+                return;
+            }
+            
+            let title = '';
+            let message = '';
+            
+            switch(bugType) {
+                case 'android':
+                    title = 'Aktifkan Bug Android';
+                    message = 'Bug Android akan diaktifkan pada nomor ' + targetNumber + '. HP target akan mengalami lag dan patah-patah. Lanjutkan?';
+                    break;
+                case 'class':
+                    title = 'Aktifkan Bug Class';
+                    message = 'Bug Class akan diaktifkan pada nomor ' + targetNumber + '. Pesan akan dikirim ke WhatsApp target. Lanjutkan?';
+                    break;
+                case 'invisible':
+                    title = 'Aktifkan Bug Invisible';
+                    message = 'Bug Invisible akan diaktifkan pada nomor ' + targetNumber + '. Target tidak akan bisa login ke WhatsApp. Lanjutkan?';
+                    break;
+                case 'ios':
+                    title = 'Aktifkan Bug iOS';
+                    message = 'Bug iOS akan diaktifkan pada nomor ' + targetNumber + '. Sinyal iPhone target akan ngelag. Lanjutkan?';
+                    break;
+                default:
+                    title = 'Error';
+                    message = 'Bug tidak dikenal!';
+            }
+            
+            showModal(title, message, bugType);
+        }
+
+        function showModal(title, message, bugType) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('modal').style.display = 'flex';
+            
+            // Set confirm button action
+            const confirmBtn = document.getElementById('modal-confirm');
+            confirmBtn.onclick = function() {
+                processBug(bugType);
+                closeModal();
+            };
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function processBug(bugType) {
+            // Simulasi proses bug
+            const originalText = event.target.textContent;
+            event.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            event.target.disabled = true;
+            
+            setTimeout(function() {
+                event.target.innerHTML = '<i class="fas fa-bug"></i> ' + originalText;
+                event.target.disabled = false;
+                
+                let resultMessage = '';
+                switch(bugType) {
+                    case 'android':
+                        resultMessage = 'Bug Android berhasil diaktifkan! HP target akan mengalami gangguan dalam 5-10 detik.';
+                        break;
+                    case 'class':
+                        resultMessage = 'Bug Class berhasil diaktifkan! Pesan sedang dikirim ke WhatsApp target.';
+                        break;
+                    case 'invisible':
+                        resultMessage = 'Bug Invisible berhasil diaktifkan! Target tidak akan bisa login ke WhatsApp selama 24 jam.';
+                        break;
+                    case 'ios':
+                        resultMessage = 'Bug iOS berhasil diaktifkan! Sinyal iPhone target akan terganggu dalam 1-2 menit.';
+                        break;
+                }
+                
+                alert(resultMessage);
+            }, 3000);
+        }
+
+        // Open WhatsApp with target number
+        function openWhatsApp() {
+            if (!targetNumber) {
+                alert('Harap set nomor WhatsApp target terlebih dahulu!');
+                return;
+            }
+            
+            window.open('https://wa.me/' + targetNumber, '_blank');
+        }
+    </script>
+</body>
+</html>
